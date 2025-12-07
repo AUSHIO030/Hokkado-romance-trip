@@ -3,481 +3,591 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>北海道浪漫之旅💃🦽</title>
+    <title>北海道浪漫之旅</title>
+    <!-- 引入 FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- 引入 Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- 引入 SortableJS 用於拖曳排序 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.css"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+
     <style>
         :root {
-            --primary: #FFB7C5; /* 櫻花粉 */
-            --primary-dark: #F08080;
-            --bg: #FFF5F7; /* 淺粉背景 */
+            --primary-pink: #FFC0CB;
+            --deep-pink: #DB7093;
+            --bg-color: #FAFAFA;
             --card-bg: #FFFFFF;
-            --text-main: #4A4A4A;
-            --text-light: #888888;
-            --accent: #FF6B6B; /* 重點色 */
-            --nav-blue: #4A90E2;
+            --text-main: #444444;
+            --text-sub: #888888;
+            --shadow: 0 4px 12px rgba(0,0,0,0.08);
+            --radius: 16px;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body {
             font-family: 'Noto Sans TC', sans-serif;
-            background-color: var(--bg);
+            background-color: var(--bg-color);
             color: var(--text-main);
             margin: 0;
             padding: 0;
-            padding-bottom: 80px; /* Bottom nav space */
+            padding-bottom: 80px; /* FAB space */
         }
 
-        /* Header */
+        /* --- Header & Nav --- */
         header {
-            background: linear-gradient(135deg, #FFB7C5 0%, #FFD1DC 100%);
-            padding: 20px;
-            text-align: center;
-            color: white;
-            box-shadow: 0 2px 10px rgba(255, 183, 197, 0.3);
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            position: relative;
+            height: 220px;
+            background-image: url('https://images.unsplash.com/photo-1542051841857-5f90071e7989?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            border-bottom-left-radius: 24px;
+            border-bottom-right-radius: 24px;
+            box-shadow: var(--shadow);
+            z-index: 10;
         }
-        header h1 { margin: 0; font-size: 1.2rem; font-weight: 500; letter-spacing: 1px; }
-        header p { margin: 5px 0 0; font-size: 0.8rem; opacity: 0.9; }
 
-        /* Main Container */
-        .container { padding: 15px; max-width: 600px; margin: 0 auto; }
+        .header-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.4));
+            border-bottom-left-radius: 24px;
+            border-bottom-right-radius: 24px;
+        }
 
-        /* Tabs Content */
-        .tab-content { display: none; animation: fadeIn 0.3s ease; }
+        .app-title {
+            position: absolute;
+            bottom: 60px;
+            left: 20px;
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        /* Floating Nav in Header Right Bottom */
+        .main-nav {
+            position: absolute;
+            bottom: -20px; /* Floating effect */
+            right: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 10px 20px;
+            border-radius: 30px;
+            display: flex;
+            gap: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            z-index: 20;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--text-sub);
+            font-size: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .nav-item i { font-size: 20px; margin-bottom: 4px; }
+        .nav-item.active { color: var(--deep-pink); font-weight: bold; }
+
+        /* --- Main Content Area --- */
+        .tab-content { display: none; padding: 30px 20px; margin-top: 10px; }
         .tab-content.active { display: block; }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* Day Cards */
-        .day-card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 0;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-            overflow: hidden;
-        }
-        .day-header {
-            padding: 15px;
-            background: rgba(255, 183, 197, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #ffeef2;
-        }
-        .day-date { font-weight: 700; color: var(--primary-dark); font-size: 1.1rem; }
-        .weather-btn {
-            font-size: 0.8rem;
-            color: var(--nav-blue);
-            text-decoration: none;
-            background: white;
-            padding: 4px 10px;
-            border-radius: 20px;
-            border: 1px solid var(--nav-blue);
-        }
-
-        /* Timeline Items */
-        .timeline { padding: 15px; }
-        .item {
-            position: relative;
-            padding-left: 25px;
-            margin-bottom: 25px;
-            border-left: 2px solid #eee;
-        }
-        .item:last-child { margin-bottom: 0; border-left: none; padding-left: 27px; }
-        .item::before {
-            content: '';
-            position: absolute;
-            left: -6px;
-            top: 0;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: var(--primary);
-        }
-        .item-tag {
-            display: inline-block;
-            font-size: 0.7rem;
-            padding: 2px 8px;
-            border-radius: 4px;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        .tag-spot { background: #E3F2FD; color: #1976D2; }
-        .tag-food { background: #FFF3E0; color: #F57C00; }
-        .tag-hotel { background: #E8F5E9; color: #388E3C; }
-        
-        .item-title { font-size: 1rem; font-weight: 600; margin-bottom: 5px; display: flex; align-items: center; }
-        .item-desc { font-size: 0.85rem; color: var(--text-light); line-height: 1.5; margin-bottom: 8px; }
-        
-        /* Guide Highlights */
-        .guide-tip {
-            background: #FFF0F5;
-            border-left: 3px solid var(--accent);
-            padding: 8px 12px;
-            margin-top: 8px;
-            font-size: 0.8rem;
-            color: #555;
-            border-radius: 0 8px 8px 0;
-        }
-        .guide-tip i { color: var(--accent); margin-right: 5px; }
-        .must-eat { color: var(--accent); font-weight: bold; }
-
-        /* Buttons */
-        .nav-btn {
-            display: inline-flex;
-            align-items: center;
-            background: var(--nav-blue);
+        /* --- 1. Itinerary Styles --- */
+        /* Weather Widget */
+        .weather-widget {
+            background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
             color: white;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            text-decoration: none;
-            margin-top: 5px;
-        }
-        .nav-btn i { margin-right: 4px; }
-
-        /* Info Grid */
-        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .info-card {
-            background: white;
             padding: 15px;
+            border-radius: var(--radius);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow);
+        }
+        .weather-info { display: flex; align-items: center; gap: 10px; }
+        .weather-temp { font-size: 28px; font-weight: bold; }
+        .weather-desc { font-size: 14px; opacity: 0.9; }
+
+        /* Date Scroller */
+        .date-scroller {
+            display: flex;
+            overflow-x: auto;
+            gap: 15px;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            scrollbar-width: none; /* Firefox */
+        }
+        .date-scroller::-webkit-scrollbar { display: none; }
+
+        .date-card {
+            min-width: 70px;
+            height: 80px;
+            background: white;
             border-radius: 12px;
-            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #eee;
+            flex-shrink: 0;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+        .date-card.active {
+            background: var(--deep-pink);
+            color: white;
+            border-color: var(--deep-pink);
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(219, 112, 147, 0.4);
+        }
+        .date-weekday { font-size: 18px; font-weight: bold; margin-bottom: 5px; }
+        .date-day { font-size: 14px; }
+
+        /* Filter */
+        .filter-container { margin-bottom: 15px; }
+        .filter-select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            background: white;
+            color: var(--text-main);
+        }
+
+        /* Timeline & Cards */
+        .timeline { position: relative; padding-left: 20px; }
+        .timeline::before {
+            content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+            width: 2px; background: #eee;
+        }
+
+        .itinerary-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 15px;
+            margin-bottom: 0; /* Spacing handled by travel time */
+            box-shadow: var(--shadow);
+            position: relative;
+            cursor: grab;
+            border-left: 5px solid var(--deep-pink);
+        }
+        .itinerary-card:active { cursor: grabbing; }
+
+        /* Flight Card Special Style */
+        .itinerary-card[data-type="flight"] {
+            border-left: 5px solid #4A90E2;
+            background: #F0F8FF;
+        }
+
+        .card-header { display: flex; justify-content: space-between; align-items: flex-start; }
+        .card-title { font-weight: bold; font-size: 16px; margin-bottom: 5px; }
+        .card-tag {
+            font-size: 10px; padding: 2px 8px; border-radius: 10px;
+            background: #eee; color: #666;
+        }
+        .card-info { font-size: 13px; color: var(--text-sub); margin-top: 5px; }
+        .card-info i { width: 20px; text-align: center; margin-right: 5px; }
+        
+        .must-eat { color: #d35400; font-weight: bold; font-size: 12px; margin-top: 5px; display: block; }
+
+        /* Travel Time Connector */
+        .travel-connector {
+            padding: 15px 0 15px 20px;
+            display: flex;
+            align-items: center;
+            color: var(--text-sub);
+            font-size: 12px;
+            position: relative;
+        }
+        .travel-connector::before {
+            content: ''; position: absolute; left: -19px; top: 50%;
+            width: 10px; height: 10px; background: var(--deep-pink);
+            border-radius: 50%; transform: translateY(-50%);
+        }
+        .travel-icon { margin-right: 8px; font-size: 14px; }
+
+        /* --- 2. Info Styles --- */
+        .info-section { margin-bottom: 25px; }
+        .info-title { font-size: 18px; font-weight: bold; margin-bottom: 10px; color: var(--deep-pink); border-bottom: 2px solid #eee; padding-bottom: 5px; }
+        
+        .flight-ticket {
+            background: white; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); margin-bottom: 15px;
+        }
+        .flight-header { background: var(--deep-pink); color: white; padding: 10px 15px; font-size: 14px; display: flex; justify-content: space-between; }
+        .flight-body { padding: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .airport-code { font-size: 24px; font-weight: bold; color: var(--text-main); }
+        .flight-time { font-size: 12px; color: var(--text-sub); }
+        .flight-duration { text-align: center; font-size: 12px; color: #aaa; position: relative; width: 80px; }
+        .flight-duration::after { content: '✈'; display: block; font-size: 16px; margin-top: -5px; color: var(--deep-pink); }
+        .flight-duration::before { content: ''; display: block; height: 1px; background: #ddd; position: absolute; top: 50%; width: 100%; z-index: -1; }
+
+        .rate-calculator { background: white; padding: 15px; border-radius: 12px; box-shadow: var(--shadow); }
+        .rate-input-group { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+        .rate-input-group input { flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 8px; }
+
+        /* --- 3. Shopping Styles --- */
+        .shopping-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .shop-item { background: white; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); position: relative; }
+        .shop-img { width: 100%; height: 120px; object-fit: cover; background: #eee; }
+        .shop-details { padding: 10px; }
+        .shop-name { font-size: 14px; font-weight: bold; margin-bottom: 5px; }
+        .delete-btn-corner { position: absolute; top: 5px; right: 5px; background: rgba(255,0,0,0.7); color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px; cursor: pointer; }
+
+        /* --- 4. Expenses Styles --- */
+        .expense-total {
+            background: var(--text-main); color: white; padding: 20px; border-radius: 12px;
+            text-align: center; margin-bottom: 20px; box-shadow: var(--shadow);
+        }
+        .total-amount { font-size: 32px; font-weight: bold; }
+        .expense-list { list-style: none; padding: 0; }
+        .expense-item {
+            background: white; padding: 15px; border-radius: 12px; margin-bottom: 10px;
+            display: flex; justify-content: space-between; align-items: center;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
-        .info-icon { font-size: 1.5rem; color: var(--primary); margin-bottom: 8px; }
-        .info-label { font-size: 0.8rem; color: var(--text-light); }
-        .info-val { font-size: 0.9rem; font-weight: bold; margin-top: 4px; }
+        .expense-left { display: flex; flex-direction: column; }
+        .expense-cat { font-size: 12px; color: var(--deep-pink); font-weight: bold; }
+        .expense-name { font-size: 15px; font-weight: 500; }
+        .expense-right { text-align: right; }
+        .expense-price { font-size: 16px; font-weight: bold; }
+        .expense-date { font-size: 11px; color: #aaa; }
 
-        /* Bottom Navigation */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            background: white;
-            display: flex;
-            justify-content: space-around;
-            padding: 12px 0;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
-            z-index: 1000;
+        /* --- Common UI --- */
+        .fab-btn {
+            position: fixed; bottom: 20px; right: 20px;
+            width: 56px; height: 56px;
+            background: var(--deep-pink); color: white;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 4px 15px rgba(219, 112, 147, 0.5);
+            cursor: pointer; z-index: 100;
+            transition: transform 0.2s;
         }
-        .nav-item {
-            text-align: center;
-            color: #ccc;
-            font-size: 0.7rem;
-            cursor: pointer;
-            transition: color 0.2s;
-        }
-        .nav-item.active { color: var(--primary-dark); }
-        .nav-item i { font-size: 1.2rem; margin-bottom: 4px; display: block; }
+        .fab-btn:active { transform: scale(0.9); }
 
+        /* Modal */
+        .modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); z-index: 200;
+            align-items: center; justify-content: center;
+        }
+        .modal.open { display: flex; }
+        .modal-content {
+            background: white; width: 90%; max-width: 400px; max-height: 90vh;
+            overflow-y: auto; border-radius: 20px; padding: 25px;
+            position: relative; animation: slideUp 0.3s;
+        }
+        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        
+        .form-group { margin-bottom: 15px; }
+        .form-label { display: block; font-size: 13px; color: var(--text-sub); margin-bottom: 5px; }
+        .form-input, .form-select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; }
+        .btn-group { display: flex; gap: 10px; margin-top: 20px; }
+        .btn { flex: 1; padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .btn-primary { background: var(--deep-pink); color: white; }
+        .btn-secondary { background: #eee; color: #666; }
+        .btn-danger { background: #ff4d4d; color: white; }
+
+        /* Helper */
+        .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>Hokkaido Trip ❄️</h1>
-    <p>北海道滑雪浪漫之旅 (12/20 - 12/26)</p>
+    <div class="header-overlay"></div>
+    <div class="app-title">Hokkaido Trip <br><span style="font-size:16px; font-weight:400;">Dec 20 - Dec 26</span></div>
+    
+    <!-- Navigation (Header Right Bottom) -->
+    <nav class="main-nav">
+        <div class="nav-item active" onclick="switchTab('itinerary')">
+            <i class="fa-solid fa-location-dot"></i>
+            <span>行程</span>
+        </div>
+        <div class="nav-item" onclick="switchTab('info')">
+            <i class="fa-solid fa-circle-info"></i>
+            <span>資訊</span>
+        </div>
+        <div class="nav-item" onclick="switchTab('shopping')">
+            <i class="fa-solid fa-basket-shopping"></i>
+            <span>購物</span>
+        </div>
+        <div class="nav-item" onclick="switchTab('expenses')">
+            <i class="fa-solid fa-sack-dollar"></i>
+            <span>花費</span>
+        </div>
+    </nav>
 </header>
 
-<!-- 行程頁面 -->
-<div id="tab-itinerary" class="container tab-content active">
-    
-    <!-- Day 1 -->
-    <div class="day-card">
-        <div class="day-header">
-            <span class="day-date">Day 1 · 12/20 (六)</span>
-            <a href="https://weather.yahoo.co.jp/weather/jp/1/1400.html" target="_blank" class="weather-btn"><i class="fas fa-cloud-sun"></i> 苫小牧天氣</a>
-        </div>
-        <div class="timeline">
-            <div class="item">
-                <span class="item-tag tag-spot">交通</span>
-                <div class="item-title">長榮航空 BR166 抵達</div>
-                <div class="item-desc">11:00 抵達新千歲機場。午餐在機場解決（推薦：卡樂B薯條、Kinotoya起司塔）。</div>
+<main id="app">
+    <!-- 1. 行程 Tab -->
+    <div id="tab-itinerary" class="tab-content active">
+        <!-- Weather -->
+        <div class="weather-widget">
+            <div class="weather-info">
+                <i class="fa-solid fa-snowflake" style="font-size: 24px;"></i>
+                <div>
+                    <div class="weather-temp" id="weather-temp">--°C</div>
+                    <div class="weather-desc">體感 <span id="weather-feel">--</span>°C</div>
+                </div>
             </div>
-            <div class="item">
-                <span class="item-tag tag-hotel">住宿</span>
-                <div class="item-title">星野 TOMAMU 度假村</div>
-                <div class="item-desc">搭乘 JR 或巴士前往度假村。</div>
-                <a href="https://www.google.com/maps/search/?api=1&query=Hoshino+Resorts+Tomamu" target="_blank" class="nav-btn"><i class="fas fa-location-arrow"></i> 導航</a>
+            <div style="text-align: right;">
+                <div style="font-size: 12px;">北海道</div>
+                <div style="font-size: 10px; opacity: 0.8;">即時氣象</div>
             </div>
-            <div class="item">
-                <span class="item-tag tag-food">晚餐</span>
-                <div class="item-title">Buffet Dining hal</div>
-                <div class="item-desc">18:00 預約(#15274)。<span class="must-eat">必吃：螃蟹吃到飽！</span></div>
-            </div>
-            <div class="item">
-                <span class="item-tag tag-spot">景點</span>
-                <div class="item-title">水之教堂 & 愛絲冰城</div>
-                <div class="item-desc">20:30 參觀安藤忠雄設計的水之教堂。晚上去 Ice Village 烤棉花糖。</div>
-                <div class="guide-tip"><i class="fas fa-lightbulb"></i> 攻略：水之教堂晚上氣氛莊嚴浪漫，記得穿保暖，冰城非常冷！</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Day 2 -->
-    <div class="day-card">
-        <div class="day-header">
-            <span class="day-date">Day 2 · 12/21 (日)</span>
-            <a href="https://weather.yahoo.co.jp/weather/jp/1/1400.html" target="_blank" class="weather-btn"><i class="fas fa-snowflake"></i> Tomamu天氣</a>
-        </div>
-        <div class="timeline">
-            <div class="item">
-                <span class="item-tag tag-food">早餐</span>
-                <div class="item-title">森林餐廳 Nininupuri</div>
-                <div class="item-desc">06:30 建議早去。<span class="must-eat">必吃：法式吐司、鮭魚丼。</span></div>
-            </div>
-            <div class="item">
-                <span class="item-tag tag-spot">活動</span>
-                <div class="item-title">全日滑雪 / 微笑海灘</div>
-                <div class="item-desc">早上滑雪課程，下午自由滑雪。晚上可去室內海灘 Mina-Mina Beach。</div>
-            </div>
-            <div class="item">
-                <span class="item-tag tag-food">晚餐</span>
-                <div class="item-title">SORA -天空-</div>
-                <div class="item-desc">17:00 RISONARE 北31樓。享用日式壽喜燒。</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Day 3 -->
-    <div class="day-card">
-        <div class="day-header">
-            <span class="day-date">Day 3 · 12/22 (一)</span>
-            <a href="https://weather.yahoo.co.jp/weather/jp/1/1200.html" target="_blank" class="weather-btn"><i class="fas fa-cloud"></i> 旭川天氣</a>
-        </div>
-        <div class="timeline">
-            <div class="item">
-                <span class="item-tag tag-spot">景點</span>
-                <div class="item-title">霧冰平台 (Cloud Walk)</div>
-                <div class="item-desc">退房前再去山頂看一次絕景。Cafe 必吃：雲朵霜淇淋。</div>
-            </div>
-            <div class="item">
-                <span class="item-tag tag-spot">移動</span>
-                <div class="item-title">前往旭川</div>
-                <div class="item-desc">JR 特急前往旭川站。入住 Y's Hotel 旭川站前。</div>
-            </div>
-            <div class="item">
-                <span class="item-tag tag-food">午餐</span>
-                <div class="item-title">湯咖哩 GARAKU</div>
-                <div class="item-desc">北海道名物。<span class="must-eat">必點：雞腿野菜湯咖哩。</span></div>
-                <a href="https://www.google.com/maps/search/?api=1&query=Garaku+Asahikawa" target="_blank" class="nav-btn"><i class="fas fa-location-arrow"></i> 導航</a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Day 4 -->
-    <div class="day-card">
-        <div class="day-header">
-            <span class="day-date">Day 4 · 12/23 (二)</span>
-            <a href="https://weather.yahoo.co.jp/weather/jp/1/1200.html" target="_blank" class="weather-btn"><i class="fas fa-snowflake"></i> 美瑛天氣</a>
-        </div>
-        <div class="timeline">
-            <div class="item">
-                <span class="item-tag tag-spot">景點</span>
-                <div class="item-title">白金青池 & 美瑛</div>
-                <div class="item-desc">搭乘道北巴士前往。冬季青池有夜間點燈，白天則是銀白世界。</div>
-            </div>
-            <div class="item">
-                <span class="item-tag tag-food">午餐</span>
-                <div class="item-title">小樽 Naruto-ya 美瑛店</div>
-                <div class="item-desc"><span class="must-eat">必吃：若雞時代炸半雞！</span>皮脆多汁。</div>
-            </div>
-            <div class="item">
-                <span class="item-tag tag-spot">景點</span>
-                <div class="item-title">精靈露臺 (Ningle Terrace)</div>
-                <div class="item-desc">位於新富良野王子飯店內。森之時計咖啡廳手磨咖啡。</div>
-                <div class="guide-tip"><i class="fas fa-camera"></i> 攻略：傍晚點燈後像童話世界，是拍照神點。</div>
-                <a href="https://www.google.com/maps/search/?api=1&query=Ningle+Terrace" target="_blank" class="nav-btn"><i class="fas fa-location-arrow"></i> 導航</a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Day 5 -->
-    <div class="day-card">
-        <div class="day-header">
-            <span class="day-date">Day 5 · 12/24 (三)</span>
-            <a href="https://weather.yahoo.co.jp/weather/jp/1/1100.html" target="_blank" class="weather-btn"><i class="fas fa-city"></i> 札幌天氣</a>
-        </div>
-        <div class="timeline">
-            <div class="item">
-                <span class="item-tag tag-spot">移動</span>
-                <div class="item-title">前往札幌</div>
-                <div class="item-desc">搭乘 JR 特急丁香號/神威號前往札幌。入住京急 EX Hotel。</div>
-            </div>
-            <div class="item">
-                <span class="item-tag tag-spot">景點</span>
-                <div class="item-title">白色戀人公園</div>
-                <div class="item-desc">下午 4 點有點燈。<span class="must-eat">必吃：白色戀人冰淇淋。</span></div>
-            </div>
-            <div class="item">
-                <span class="item-tag tag-spot">活動</span>
-                <div class="item-title">札幌白色燈樹節 & 聖誕市集</div>
-                <div class="item-desc">大通公園會場。感受平安夜的浪漫氣氛！</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Day 6 -->
-    <div class="day-card">
-        <div class="day-header">
-            <span class="day-date">Day 6 · 12/25 (四)</span>
-            <a href="https://weather.yahoo.co.jp/weather/jp/1/1100.html" target="_blank" class="weather-btn"><i class="fas fa-snowflake"></i> 小樽天氣</a>
-        </div>
-        <div class="timeline">
-            <div class="item">
-                <span class="item-tag tag-food">早餐</span>
-                <div class="item-title">場外市場</div>
-                <div class="item-desc">享用新鮮海鮮丼。</div>
-            </div>
-            <div class="item">
-                <span class="item-tag tag-spot">景點</span>
-                <div class="item-title">小樽浪漫遊</div>
-                <div class="item-desc">小樽運河、音樂盒堂、北菓樓、六花亭。</div>
-                <div class="guide-tip"><i class="fas fa-utensils"></i> 攻略：LeTAO 雙層乳酪蛋糕、北菓樓夢不思議泡芙是必吃甜點！</div>
-                <a href="https://www.google.com/maps/search/?api=1&query=Otaru+Canal" target="_blank" class="nav-btn"><i class="fas fa-location-arrow"></i> 導航</a>
-            </div>
-            <div class="item">
-                <span class="item-tag tag-food">宵夜</span>
-                <div class="item-title">深夜芭菲 (Shime Parfait)</div>
-                <div class="item-desc">札幌特有文化，飯後吃聖代。推薦：Parfaiteria Pal 或 佐藤堂。</div>
-            </div>
-        </div>
-    </div>
-
-     <!-- Day 7 -->
-     <div class="day-card">
-        <div class="day-header">
-            <span class="day-date">Day 7 · 12/26 (五)</span>
-            <a href="https://weather.yahoo.co.jp/weather/jp/1/1100.html" target="_blank" class="weather-btn"><i class="fas fa-sun"></i> 札幌天氣</a>
-        </div>
-        <div class="timeline">
-            <div class="item">
-                <span class="item-tag tag-food">午餐</span>
-                <div class="item-title">冰雪之門 (氷雪の門)</div>
-                <div class="item-desc">12:30 預約(#70066)。老字號螃蟹料理專門店。</div>
-            </div>
-            <div class="item">
-                <span class="item-tag tag-spot">購物</span>
-                <div class="item-title">最後衝刺</div>
-                <div class="item-desc">Stellar Place, Parco, 狸小路。買伴手禮！</div>
-            </div>
-            <div class="item">
-                <span class="item-tag tag-food">晚餐</span>
-                <div class="item-title">極致超熟成炭火燒肉 Shibuki</div>
-                <div class="item-desc">完美的最後一餐。</div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- 資訊頁面 -->
-<div id="tab-info" class="container tab-content">
-    <div class="day-card" style="padding: 20px;">
-        <h3 style="margin-top:0; color:var(--primary-dark);">✈️ 航班資訊</h3>
-        <div class="item">
-            <div class="item-title">去程 (12/20)</div>
-            <div class="item-desc">長榮 BR166 | 06:15 TPE -> 11:00 CTS</div>
-        </div>
-        <div class="item">
-            <div class="item-title">回程 (12/26)</div>
-            <div class="item-desc">請確認回程航班時間</div>
         </div>
 
-        <h3 style="color:var(--primary-dark);">🏨 住宿清單</h3>
-        <div class="item">
-            <div class="item-title">星野 TOMAMU 度假村</div>
-            <div class="item-desc">12/20 - 12/22 (2晚)</div>
-        </div>
-        <div class="item">
-            <div class="item-title">Y's Hotel 旭川站前</div>
-            <div class="item-desc">12/22 - 12/24 (2晚)</div>
-        </div>
-        <div class="item">
-            <div class="item-title">札幌京急 EX Hotel</div>
-            <div class="item-desc">12/24 - 12/26 (2晚)</div>
+        <!-- Date Scroller -->
+        <div class="date-scroller" id="date-scroller">
+            <!-- JS Generated -->
         </div>
 
-        <h3 style="color:var(--primary-dark);">🆘 緊急聯絡</h3>
-        <div class="info-grid">
-            <div class="info-card">
-                <div class="info-icon"><i class="fas fa-ambulance"></i></div>
-                <div class="info-label">救護車/火警</div>
-                <div class="info-val">119</div>
-            </div>
-            <div class="info-card">
-                <div class="info-icon"><i class="fas fa-user-shield"></i></div>
-                <div class="info-label">警察局</div>
-                <div class="info-val">110</div>
-            </div>
+        <!-- Filter -->
+        <div class="filter-container">
+            <select class="filter-select" id="type-filter" onchange="renderItinerary()">
+                <option value="all">顯示全部類別</option>
+                <option value="spot">景點</option>
+                <option value="food">美食</option>
+                <option value="hotel">住宿</option>
+                <option value="shopping">購物</option>
+                <option value="flight">航班</option>
+            </select>
         </div>
-    </div>
-</div>
 
-<!-- 預算頁面 -->
-<div id="tab-budget" class="container tab-content">
-    <div class="day-card" style="padding: 20px;">
-        <h3 style="margin-top:0; color:var(--primary-dark);">💰 預算/記帳</h3>
-        <p style="color:#888; font-size:0.9rem;">這裡可以記錄您的開銷 (範例)</p>
-        
-        <div style="background:#f9f9f9; padding:10px; border-radius:8px; margin-bottom:10px;">
-            <div style="display:flex; justify-content:space-between;">
-                <span>Buffet Hal 晚餐</span>
-                <span style="font-weight:bold;">¥5,500</span>
-            </div>
-        </div>
-        <div style="background:#f9f9f9; padding:10px; border-radius:8px; margin-bottom:10px;">
-            <div style="display:flex; justify-content:space-between;">
-                <span>JR 札幌-旭川</span>
-                <span style="font-weight:bold;">¥4,690</span>
-            </div>
+        <!-- Timeline List -->
+        <div class="timeline" id="itinerary-list">
+            <!-- JS Generated Cards -->
         </div>
         
-        <div style="margin-top:20px; border-top:2px dashed #eee; padding-top:15px;">
-            <div style="display:flex; justify-content:space-between; font-size:1.2rem; font-weight:bold; color:var(--accent);">
-                <span>總支出</span>
-                <span>¥10,190</span>
+        <!-- FAB -->
+        <div class="fab-btn" onclick="openItineraryModal()">
+            <i class="fa-solid fa-plus"></i>
+        </div>
+    </div>
+
+    <!-- 2. 資訊 Tab -->
+    <div id="tab-info" class="tab-content">
+        <div class="info-section">
+            <div class="info-title">匯率換算 (JPY to TWD)</div>
+            <div class="rate-calculator">
+                <div class="rate-input-group">
+                    <span>¥</span>
+                    <input type="number" id="jpy-input" placeholder="日幣金額" oninput="calculateRate()">
+                </div>
+                <div class="rate-input-group">
+                    <span>NT$</span>
+                    <input type="text" id="twd-output" readonly placeholder="台幣金額">
+                </div>
+                <div style="font-size: 12px; color: #888; text-align: right;">*匯率預設 0.22</div>
             </div>
+        </div>
+
+        <div class="info-section">
+            <div class="info-title">航班資訊</div>
+            <!-- Outbound -->
+            <div class="flight-ticket">
+                <div class="flight-header">
+                    <span>去程 12/20 (五)</span>
+                    <span>BR166</span>
+                </div>
+                <div class="flight-body">
+                    <div style="text-align: center;">
+                        <div class="airport-code">TPE</div>
+                        <div class="flight-time">06:15</div>
+                    </div>
+                    <div class="flight-duration">3h 35m</div>
+                    <div style="text-align: center;">
+                        <div class="airport-code">CTS</div>
+                        <div class="flight-time">11:00</div>
+                    </div>
+                </div>
+            </div>
+            <!-- Inbound -->
+            <div class="flight-ticket">
+                <div class="flight-header">
+                    <span>回程 12/26 (四)</span>
+                    <span>BR115</span>
+                </div>
+                <div class="flight-body">
+                    <div style="text-align: center;">
+                        <div class="airport-code">CTS</div>
+                        <div class="flight-time">15:20</div>
+                    </div>
+                    <div class="flight-duration">4h 15m</div>
+                    <div style="text-align: center;">
+                        <div class="airport-code">TPE</div>
+                        <div class="flight-time">19:00</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <div class="info-title">住宿 & 緊急</div>
+            <div class="itinerary-card" style="margin-bottom: 10px;">
+                <div class="card-title">星野 Tomamu The Tower</div>
+                <div class="card-info"><i class="fa-solid fa-phone"></i> +81 167-58-1111</div>
+                <div class="card-info"><i class="fa-solid fa-map-pin"></i> 北海道勇払郡占冠村</div>
+            </div>
+            <div class="itinerary-card">
+                <div class="card-title">緊急聯絡</div>
+                <div class="card-info"><i class="fa-solid fa-user-shield"></i> 警察: 110</div>
+                <div class="card-info"><i class="fa-solid fa-truck-medical"></i> 救護車: 119</div>
+                <div class="card-info"><i class="fa-solid fa-globe"></i> 駐日代表處: +81-3-3280-7811</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. 購物 Tab -->
+    <div id="tab-shopping" class="tab-content">
+        <div class="shopping-grid" id="shopping-list">
+            <!-- JS Generated -->
+        </div>
+        <div class="fab-btn" onclick="openShoppingModal()">
+            <i class="fa-solid fa-plus"></i>
+        </div>
+    </div>
+
+    <!-- 4. 花費 Tab -->
+    <div id="tab-expenses" class="tab-content">
+        <div class="expense-total">
+            <div style="font-size: 14px; opacity: 0.8;">總花費 (JPY)</div>
+            <div class="total-amount" id="total-expense">¥0</div>
+        </div>
+        <ul class="expense-list" id="expense-list">
+            <!-- JS Generated -->
+        </ul>
+        <div class="fab-btn" onclick="openExpenseModal()">
+            <i class="fa-solid fa-plus"></i>
+        </div>
+    </div>
+</main>
+
+<!-- Modals -->
+<!-- Itinerary Modal -->
+<div id="modal-itinerary" class="modal">
+    <div class="modal-content">
+        <h3 id="modal-itinerary-title">新增行程</h3>
+        <input type="hidden" id="itinerary-id">
+        <div class="form-group">
+            <label class="form-label">名稱</label>
+            <input type="text" class="form-input" id="it-name">
+        </div>
+        <div class="form-group">
+            <label class="form-label">類別</label>
+            <select class="form-select" id="it-type">
+                <option value="spot">景點</option>
+                <option value="food">美食</option>
+                <option value="shopping">購物</option>
+                <option value="hotel">住宿</option>
+                <option value="flight">航班</option>
+                <option value="other">其他</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="form-label">時間/營業時間</label>
+            <input type="text" class="form-input" id="it-time" placeholder="例如: 10:00 - 12:00">
+        </div>
+        <div class="form-group">
+            <label class="form-label">交通方式 (從上一站)</label>
+            <select class="form-select" id="it-trans-method">
+                <option value="walk">步行</option>
+                <option value="car">開車</option>
+                <option value="transit">大眾運輸</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="form-label">交通時間 (分鐘)</label>
+            <input type="number" class="form-input" id="it-trans-time" placeholder="例如: 15">
+        </div>
+        <div class="form-group">
+            <label class="form-label">備註/必吃/攻略</label>
+            <textarea class="form-input" id="it-note" rows="3"></textarea>
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-secondary" onclick="closeModal('modal-itinerary')">取消</button>
+            <button class="btn btn-danger hidden" id="btn-delete-itinerary" onclick="deleteItinerary()">刪除</button>
+            <button class="btn btn-primary" onclick="saveItinerary()">儲存</button>
         </div>
     </div>
 </div>
 
-<!-- Bottom Navigation -->
-<div class="bottom-nav">
-    <div class="nav-item active" onclick="switchTab('itinerary', this)">
-        <i class="fas fa-map-marked-alt"></i> 行程
+<!-- Shopping Modal -->
+<div id="modal-shopping" class="modal">
+    <div class="modal-content">
+        <h3>新增購物清單</h3>
+        <div class="form-group">
+            <label class="form-label">商品名稱</label>
+            <input type="text" class="form-input" id="shop-name">
+        </div>
+        <div class="form-group">
+            <label class="form-label">圖片</label>
+            <input type="file" class="form-input" id="shop-img" accept="image/*">
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-secondary" onclick="closeModal('modal-shopping')">取消</button>
+            <button class="btn btn-primary" onclick="saveShopping()">加入</button>
+        </div>
     </div>
-    <div class="nav-item" onclick="switchTab('info', this)">
-        <i class="fas fa-passport"></i> 資訊
-    </div>
-    <div class="nav-item" onclick="switchTab('budget', this)">
-        <i class="fas fa-wallet"></i> 預算
+</div>
+
+<!-- Expense Modal -->
+<div id="modal-expense" class="modal">
+    <div class="modal-content">
+        <h3>新增花費</h3>
+        <div class="form-group">
+            <label class="form-label">日期</label>
+            <select class="form-select" id="exp-date"></select>
+        </div>
+        <div class="form-group">
+            <label class="form-label">類別</label>
+            <select class="form-select" id="exp-cat">
+                <option value="飲食">飲食</option>
+                <option value="交通">交通</option>
+                <option value="住宿">住宿</option>
+                <option value="門票">門票</option>
+                <option value="購物">購物</option>
+                <option value="其他">其他</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="form-label">名稱</label>
+            <input type="text" class="form-input" id="exp-name">
+        </div>
+        <div class="form-group">
+            <label class="form-label">金額 (JPY)</label>
+            <input type="number" class="form-input" id="exp-amount">
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-secondary" onclick="closeModal('modal-expense')">取消</button>
+            <button class="btn btn-primary" onclick="saveExpense()">儲存</button>
+        </div>
     </div>
 </div>
 
 <script>
-    function switchTab(tabId, element) {
-        // Hide all tabs
-        document.querySelectorAll('.tab-content').forEach(tab => {
-            tab.classList.remove('active');
-        });
-        // Show selected tab
-        document.getElementById('tab-' + tabId).classList.add('active');
-        
-        // Update nav active state
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.classList.remove('active');
-        });
-        element.classList.add('active');
-        
-        // Scroll to top
-        window.scrollTo(0, 0);
-    }
-</script>
+    // --- Data Initialization ---
+    const dates = [
+        { date: '12/20', day: 'Fri', full: '2025-12-20' },
+        { date: '12/21', day: 'Sat', full: '2025-12-21' },
+        { date: '12/22', day: 'Sun', full: '2025-12-22' },
+        { date: '12/23', day: 'Mon', full: '2025-12-23' },
+        { date: '12/24', day: 'Tue', full: '2025-12-24' },
+        { date: '12/25', day: 'Wed', full: '2025-12-25' },
+        { date: '12/26', day: 'Thu', full: '2025-12-26' }
+    ];
 
-</body>
-</html>
+    // Initial Data from PDF
+    const initialItinerary = [
+        { id: '1', date: '12/20', type: 'flight', name: 'BR166 抵達新千歲', time: '11:00', transMethod: 'walk', transTime: 0, note: '領取行李、租車' },
+        { id: '2', date: '12/20', type: 'spot', name: '星野度假村 Check-in', time: '15:00', transMethod: 'car', transTime: 90, note: '享受度假村設施' },
+        { id: '3', date: '12/20', type: 'food', name: '森林餐廳 Nininupuri', time: '18:00', transMethod: 'walk', transTime: 10, note: '<span class=",[object Object]
+
+
