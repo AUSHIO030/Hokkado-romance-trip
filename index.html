@@ -216,16 +216,24 @@
         .info-section { margin-bottom: 25px; }
         .info-title { font-size: 18px; font-weight: bold; margin-bottom: 10px; color: var(--deep-pink); border-bottom: 2px solid #eee; padding-bottom: 5px; }
         
+        .flight-group-title {
+            font-size: 14px; font-weight: bold; color: #555; margin: 10px 0 5px 0; display: flex; align-items: center;
+        }
+        .flight-group-title i { margin-right: 5px; color: #4A90E2; }
+
         .flight-ticket {
             background: white; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); margin-bottom: 15px;
         }
-        .flight-header { background: var(--deep-pink); color: white; padding: 10px 15px; font-size: 14px; display: flex; justify-content: space-between; }
+        .flight-header { background: var(--deep-pink); color: white; padding: 8px 15px; font-size: 13px; display: flex; justify-content: space-between; }
+        .flight-header.sub { background: #888; } /* For connecting flights */
+        
         .flight-body { padding: 15px; display: flex; justify-content: space-between; align-items: center; }
-        .airport-code { font-size: 24px; font-weight: bold; color: var(--text-main); }
+        .airport-code { font-size: 20px; font-weight: bold; color: var(--text-main); }
         .flight-time { font-size: 12px; color: var(--text-sub); }
-        .flight-duration { text-align: center; font-size: 12px; color: #aaa; position: relative; width: 80px; }
-        .flight-duration::after { content: '✈'; display: block; font-size: 16px; margin-top: -5px; color: var(--deep-pink); }
+        .flight-duration { text-align: center; font-size: 11px; color: #aaa; position: relative; width: 60px; }
+        .flight-duration::after { content: '✈'; display: block; font-size: 14px; margin-top: -5px; color: var(--deep-pink); }
         .flight-duration::before { content: ''; display: block; height: 1px; background: #ddd; position: absolute; top: 50%; width: 100%; z-index: -1; }
+        .flight-no { font-size: 12px; font-weight: bold; color: #444; margin-top: 4px; display: block; text-align: center;}
 
         .rate-calculator { background: white; padding: 15px; border-radius: 12px; box-shadow: var(--shadow); }
         .rate-input-group { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
@@ -303,7 +311,7 @@
 
 <header>
     <div class="header-overlay"></div>
-    <div class="app-title">Hokkaido Trip <br><span style="font-size:16px; font-weight:400;">Dec 20 - Dec 26</span></div>
+    <div class="app-title">Hokkaido Trip <br><span style="font-size:16px; font-weight:400;">Dec 20 - Dec 27</span></div>
     
     <!-- Navigation (Header Right Bottom) -->
     <nav class="main-nav">
@@ -391,10 +399,35 @@
 
         <div class="info-section">
             <div class="info-title">航班資訊</div>
-            <!-- Outbound -->
+            
+            <!-- 去程 -->
+            <div class="flight-group-title"><i class="fa-solid fa-plane-departure"></i> 去程 (Outbound)</div>
+            
+            <!-- 1C Leg 1 -->
+            <div class="flight-ticket">
+                <div class="flight-header sub">
+                    <span>1C - 12/19 (五)</span>
+                    <span>長榮航空</span>
+                </div>
+                <div class="flight-body">
+                    <div style="text-align: center;">
+                        <div class="airport-code">HKG</div>
+                        <div class="flight-time">21:50</div>
+                    </div>
+                    <div class="flight-duration">
+                        <span class="flight-no">--</span>
+                    </div>
+                    <div style="text-align: center;">
+                        <div class="airport-code">TPE</div>
+                        <div class="flight-time">23:35</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 1C & Penny Leg 2 -->
             <div class="flight-ticket">
                 <div class="flight-header">
-                    <span>去程 12/20 (五)</span>
+                    <span>1C & Penny - 12/20 (六)</span>
                     <span>BR166</span>
                 </div>
                 <div class="flight-body">
@@ -402,31 +435,61 @@
                         <div class="airport-code">TPE</div>
                         <div class="flight-time">06:15</div>
                     </div>
-                    <div class="flight-duration">3h 35m</div>
+                    <div class="flight-duration">
+                        <span class="flight-no">BR166</span>
+                    </div>
                     <div style="text-align: center;">
                         <div class="airport-code">CTS</div>
                         <div class="flight-time">11:00</div>
                     </div>
                 </div>
             </div>
-            <!-- Inbound -->
+
+            <!-- 回程 -->
+            <div class="flight-group-title" style="margin-top: 20px;"><i class="fa-solid fa-plane-arrival"></i> 回程 (Inbound)</div>
+
+            <!-- 1C & Penny Leg 1 -->
             <div class="flight-ticket">
                 <div class="flight-header">
-                    <span>回程 12/26 (四)</span>
-                    <span>BR115</span>
+                    <span>1C & Penny - 12/27 (六)</span>
+                    <span>BR165</span>
                 </div>
                 <div class="flight-body">
                     <div style="text-align: center;">
                         <div class="airport-code">CTS</div>
-                        <div class="flight-time">15:20</div>
+                        <div class="flight-time">12:10</div>
                     </div>
-                    <div class="flight-duration">4h 15m</div>
+                    <div class="flight-duration">
+                        <span class="flight-no">BR165</span>
+                    </div>
                     <div style="text-align: center;">
                         <div class="airport-code">TPE</div>
-                        <div class="flight-time">19:00</div>
+                        <div class="flight-time">16:05</div>
                     </div>
                 </div>
             </div>
+
+            <!-- 1C Leg 2 -->
+            <div class="flight-ticket">
+                <div class="flight-header sub">
+                    <span>1C - 12/27 (六)</span>
+                    <span>長榮航空</span>
+                </div>
+                <div class="flight-body">
+                    <div style="text-align: center;">
+                        <div class="airport-code">TPE</div>
+                        <div class="flight-time">18:10</div>
+                    </div>
+                    <div class="flight-duration">
+                        <span class="flight-no">--</span>
+                    </div>
+                    <div style="text-align: center;">
+                        <div class="airport-code">HKG</div>
+                        <div class="flight-time">20:05</div>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <div class="info-section">
@@ -575,19 +638,393 @@
 <script>
     // --- Data Initialization ---
     const dates = [
-        { date: '12/20', day: 'Fri', full: '2025-12-20' },
-        { date: '12/21', day: 'Sat', full: '2025-12-21' },
-        { date: '12/22', day: 'Sun', full: '2025-12-22' },
-        { date: '12/23', day: 'Mon', full: '2025-12-23' },
-        { date: '12/24', day: 'Tue', full: '2025-12-24' },
-        { date: '12/25', day: 'Wed', full: '2025-12-25' },
-        { date: '12/26', day: 'Thu', full: '2025-12-26' }
+        { date: '12/20', day: 'Sat', full: '2025-12-20' },
+        { date: '12/21', day: 'Sun', full: '2025-12-21' },
+        { date: '12/22', day: 'Mon', full: '2025-12-22' },
+        { date: '12/23', day: 'Tue', full: '2025-12-23' },
+        { date: '12/24', day: 'Wed', full: '2025-12-24' },
+        { date: '12/25', day: 'Thu', full: '2025-12-25' },
+        { date: '12/26', day: 'Fri', full: '2025-12-26' },
+        { date: '12/27', day: 'Sat', full: '2025-12-27' }
     ];
 
     // Initial Data from PDF
     const initialItinerary = [
-        { id: '1', date: '12/20', type: 'flight', name: 'BR166 抵達新千歲', time: '11:00', transMethod: 'walk', transTime: 0, note: '領取行李、租車' },
+        { id: '1', date: '12/20', type: 'flight', name: 'BR166 抵達新千歲', time: '11:00', transMethod: 'walk', transTime: 0, note: '1C & Penny 抵達，領取行李、租車' },
         { id: '2', date: '12/20', type: 'spot', name: '星野度假村 Check-in', time: '15:00', transMethod: 'car', transTime: 90, note: '享受度假村設施' },
-        { id: '3', date: '12/20', type: 'food', name: '森林餐廳 Nininupuri', time: '18:00', transMethod: 'walk', transTime: 10, note: '<span class=",[object Object]
+        { id: '3', date: '12/20', type: 'food', name: '森林餐廳 Nininupuri', time: '18:00', transMethod: 'walk', transTime: 10, note: '<span class="must-eat">必吃：自助餐牛排</span>' },
+        
+        { id: '4', date: '12/21', type: 'spot', name: '霧冰平台', time: '08:00', transMethod: 'walk', transTime: 15, note: '搭乘纜車看雲海/霧冰' },
+        { id: '5', date: '12/21', type: 'food', name: '湯咖哩 GARAKU', time: '12:00', transMethod: 'walk', transTime: 10, note: '星野渡假村內分店' },
+        { id: '6', date: '12/21', type: 'spot', name: '水之教堂', time: '20:30', transMethod: 'walk', transTime: 10, note: '安藤忠雄設計，晚上參觀' },
 
+        { id: '7', date: '12/22', type: 'spot', name: '前往旭川動物園', time: '09:00', transMethod: 'car', transTime: 120, note: '企鵝散步必看 (11:00)' },
+        { id: '8', date: '12/22', type: 'food', name: '旭川拉麵村', time: '13:00', transMethod: 'car', transTime: 15, note: '<span class="must-eat">必點：梅光軒醬油拉麵</span>' },
+        
+        { id: '9', date: '12/23', type: 'spot', name: '前往富良野', time: '10:00', transMethod: 'car', transTime: 60, note: '' },
+        { id: '10', date: '12/23', type: 'spot', name: '精靈露台', time: '16:00', transMethod: 'car', transTime: 10, note: '浪漫點燈，適合拍照' },
 
+        { id: '11', date: '12/24', type: 'spot', name: '前往札幌', time: '09:00', transMethod: 'car', transTime: 120, note: '白色戀人公園' },
+        { id: '12', date: '12/24', type: 'spot', name: '札幌白色燈樹節', time: '18:00', transMethod: 'walk', transTime: 10, note: '大通公園' },
+        { id: '13', date: '12/24', type: 'food', name: '難陀 帝王蟹吃到飽', time: '19:30', transMethod: 'walk', transTime: 10, note: '<span class="must-eat">重要：記得出示預約代號</span>' },
+
+        { id: '14', date: '12/25', type: 'spot', name: '小樽運河', time: '10:00', transMethod: 'transit', transTime: 40, note: '北一硝子館、音樂盒堂' },
+        { id: '15', date: '12/25', type: 'food', name: 'LeTAO 本店', time: '14:00', transMethod: 'walk', transTime: 5, note: '<span class="must-eat">必買：雙層乳酪蛋糕</span>' },
+
+        { id: '16', date: '12/26', type: 'spot', name: '札幌市區觀光', time: '10:00', transMethod: 'walk', transTime: 20, note: '狸小路商店街' },
+        
+        { id: '17', date: '12/27', type: 'spot', name: 'Rera Outlet / 機場', time: '09:00', transMethod: 'car', transTime: 60, note: '最後採買，還車' },
+        { id: '18', date: '12/27', type: 'flight', name: 'BR115 返程', time: '12:10', transMethod: 'walk', transTime: 0, note: '1C & Penny 飛往桃園' }
+    ];
+
+    // State Management
+    let appState = {
+        currentDate: '12/20',
+        itinerary: JSON.parse(localStorage.getItem('hokkaido_itinerary')) || initialItinerary,
+        shopping: JSON.parse(localStorage.getItem('hokkaido_shopping')) || [],
+        expenses: JSON.parse(localStorage.getItem('hokkaido_expenses')) || []
+    };
+
+    // --- Functions ---
+
+    function init() {
+        renderDateScroller();
+        renderItinerary();
+        renderShopping();
+        renderExpenses();
+        fetchWeather();
+        
+        // Populate Expense Date Select
+        const expDateSelect = document.getElementById('exp-date');
+        dates.forEach(d => {
+            const opt = document.createElement('option');
+            opt.value = d.full;
+            opt.text = `${d.date} (${d.day})`;
+            expDateSelect.add(opt);
+        });
+        
+        // Auto select today in expense if possible
+        const today = new Date().toISOString().split('T'),[object Object],;
+        if(expDateSelect.querySelector(`option[value="${today}"]`)) {
+            expDateSelect.value = today;
+        }
+    }
+
+    function switchTab(tabName) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+        
+        document.getElementById(`tab-${tabName}`).classList.add('active');
+        // Find nav item index logic (simplified)
+        const navs = ['itinerary', 'info', 'shopping', 'expenses'];
+        document.querySelectorAll('.nav-item')[navs.indexOf(tabName)].classList.add('active');
+    }
+
+    // --- Itinerary Logic ---
+    function renderDateScroller() {
+        const container = document.getElementById('date-scroller');
+        container.innerHTML = '';
+        dates.forEach(d => {
+            const el = document.createElement('div');
+            el.className = `date-card ${d.date === appState.currentDate ? 'active' : ''}`;
+            el.innerHTML = `<div class="date-weekday">${d.day}</div><div class="date-day">${d.date}</div>`;
+            el.onclick = () => {
+                appState.currentDate = d.date;
+                renderDateScroller();
+                renderItinerary();
+            };
+            container.appendChild(el);
+        });
+    }
+
+    function renderItinerary() {
+        const container = document.getElementById('itinerary-list');
+        const filter = document.getElementById('type-filter').value;
+        container.innerHTML = '';
+
+        let items = appState.itinerary.filter(i => i.date === appState.currentDate);
+        if (filter !== 'all') {
+            items = items.filter(i => i.type === filter);
+        }
+
+        // Sort by order (if we had an order field, but here array index is order)
+        // We rely on the array order.
+
+        items.forEach((item, index) => {
+            // Travel Connector (Skip for first item of the day usually, or show from hotel)
+            if (index > 0 || item.transTime > 0) {
+                let iconClass = 'fa-person-walking';
+                if (item.transMethod === 'car') iconClass = 'fa-car';
+                if (item.transMethod === 'transit') iconClass = 'fa-train-subway';
+                
+                const conn = document.createElement('div');
+                conn.className = 'travel-connector';
+                conn.innerHTML = `<i class="fa-solid ${iconClass} travel-icon"></i> ${item.transTime} min`;
+                container.appendChild(conn);
+            }
+
+            const card = document.createElement('div');
+            card.className = 'itinerary-card';
+            card.dataset.id = item.id;
+            card.dataset.type = item.type;
+            
+            // Google Maps Link
+            const mapQuery = encodeURIComponent(item.name + " 北海道");
+            const mapLink = `https://www.google.com/maps/search/?api=1&query=${mapQuery}`;
+
+            card.innerHTML = `
+                <div class="card-header" onclick="window.open('${mapLink}', '_blank')">
+                    <div>
+                        <div class="card-title">${item.name}</div>
+                        <span class="card-tag">${getTypeName(item.type)}</span>
+                    </div>
+                    <div style="text-align: right; font-size: 14px; font-weight: bold; color: var(--deep-pink);">
+                        ${item.time}
+                    </div>
+                </div>
+                <div class="card-info" onclick="editItinerary('${item.id}')">
+                    ${item.note ? `<div><i class="fa-solid fa-circle-exclamation"></i> ${item.note}</div>` : ''}
+                </div>
+            `;
+            container.appendChild(card);
+        });
+
+        // Initialize Sortable
+        new Sortable(container, {
+            animation: 150,
+            handle: '.itinerary-card',
+            onEnd: function (evt) {
+                // Reorder logic would go here (complex because of travel connectors in DOM)
+                // For this demo, we just visually allow it. 
+                // To persist: we would need to map DOM indices back to data array.
+            }
+        });
+    }
+
+    function getTypeName(type) {
+        const map = { spot: '景點', food: '美食', shopping: '購物', hotel: '住宿', flight: '航班', other: '其他' };
+        return map[type] || type;
+    }
+
+    // Modal Logic
+    function openItineraryModal(id = null) {
+        const modal = document.getElementById('modal-itinerary');
+        const title = document.getElementById('modal-itinerary-title');
+        const btnDelete = document.getElementById('btn-delete-itinerary');
+        
+        // Reset form
+        document.getElementById('it-name').value = '';
+        document.getElementById('it-time').value = '';
+        document.getElementById('it-note').value = '';
+        document.getElementById('it-trans-time').value = '';
+        document.getElementById('itinerary-id').value = '';
+
+        if (id) {
+            const item = appState.itinerary.find(i => i.id === id);
+            title.innerText = '編輯行程';
+            document.getElementById('itinerary-id').value = item.id;
+            document.getElementById('it-name').value = item.name;
+            document.getElementById('it-type').value = item.type;
+            document.getElementById('it-time').value = item.time;
+            document.getElementById('it-trans-method').value = item.transMethod;
+            document.getElementById('it-trans-time').value = item.transTime;
+            // Strip HTML for editing
+            document.getElementById('it-note').value = item.note.replace(/<[^>]*>?/gm, '');
+            btnDelete.classList.remove('hidden');
+        } else {
+            title.innerText = '新增行程';
+            btnDelete.classList.add('hidden');
+        }
+        modal.classList.add('open');
+    }
+
+    function editItinerary(id) {
+        openItineraryModal(id);
+    }
+
+    function saveItinerary() {
+        const id = document.getElementById('itinerary-id').value;
+        const name = document.getElementById('it-name').value;
+        if(!name) return alert('請輸入名稱');
+
+        const newItem = {
+            id: id || Date.now().toString(),
+            date: appState.currentDate,
+            name: name,
+            type: document.getElementById('it-type').value,
+            time: document.getElementById('it-time').value,
+            transMethod: document.getElementById('it-trans-method').value,
+            transTime: document.getElementById('it-trans-time').value || 0,
+            note: document.getElementById('it-note').value
+        };
+
+        if (id) {
+            const idx = appState.itinerary.findIndex(i => i.id === id);
+            appState.itinerary[idx] = newItem;
+        } else {
+            appState.itinerary.push(newItem);
+        }
+
+        saveData();
+        closeModal('modal-itinerary');
+        renderItinerary();
+    }
+
+    function deleteItinerary() {
+        if(confirm('確定要刪除此行程嗎？')) {
+            const id = document.getElementById('itinerary-id').value;
+            appState.itinerary = appState.itinerary.filter(i => i.id !== id);
+            saveData();
+            closeModal('modal-itinerary');
+            renderItinerary();
+        }
+    }
+
+    // --- Shopping Logic ---
+    function renderShopping() {
+        const container = document.getElementById('shopping-list');
+        container.innerHTML = '';
+        appState.shopping.forEach((item, index) => {
+            const div = document.createElement('div');
+            div.className = 'shop-item';
+            div.innerHTML = `
+                <div class="delete-btn-corner" onclick="deleteShopping(${index})">✕</div>
+                <img src="${item.img || 'https://via.placeholder.com/150?text=No+Image'}" class="shop-img">
+                <div class="shop-details">
+                    <div class="shop-name">${item.name}</div>
+                </div>
+            `;
+            container.appendChild(div);
+        });
+    }
+
+    function openShoppingModal() {
+        document.getElementById('shop-name').value = '';
+        document.getElementById('shop-img').value = '';
+        document.getElementById('modal-shopping').classList.add('open');
+    }
+
+    function saveShopping() {
+        const name = document.getElementById('shop-name').value;
+        const fileInput = document.getElementById('shop-img');
+        
+        if (!name) return alert('請輸入商品名稱');
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            appState.shopping.push({
+                name: name,
+                img: e.target.result // Base64 string
+            });
+            saveData();
+            closeModal('modal-shopping');
+            renderShopping();
+        };
+
+        if (fileInput.files,[object Object],) {
+            reader.readAsDataURL(fileInput.files,[object Object],);
+        } else {
+            appState.shopping.push({ name: name, img: null });
+            saveData();
+            closeModal('modal-shopping');
+            renderShopping();
+        }
+    }
+
+    function deleteShopping(index) {
+        if(confirm('刪除此商品？')) {
+            appState.shopping.splice(index, 1);
+            saveData();
+            renderShopping();
+        }
+    }
+
+    // --- Expense Logic ---
+    function renderExpenses() {
+        const list = document.getElementById('expense-list');
+        const totalEl = document.getElementById('total-expense');
+        list.innerHTML = '';
+        
+        let total = 0;
+        appState.expenses.forEach(ex => {
+            total += parseInt(ex.amount);
+            const li = document.createElement('li');
+            li.className = 'expense-item';
+            li.innerHTML = `
+                <div class="expense-left">
+                    <span class="expense-cat">${ex.category}</span>
+                    <span class="expense-name">${ex.name}</span>
+                </div>
+                <div class="expense-right">
+                    <div class="expense-price">¥${ex.amount}</div>
+                    <div class="expense-date">${ex.date}</div>
+                </div>
+            `;
+            list.appendChild(li);
+        });
+        totalEl.innerText = '¥' + total.toLocaleString();
+    }
+
+    function openExpenseModal() {
+        document.getElementById('exp-name').value = '';
+        document.getElementById('exp-amount').value = '';
+        document.getElementById('modal-expense').classList.add('open');
+    }
+
+    function saveExpense() {
+        const name = document.getElementById('exp-name').value;
+        const amount = document.getElementById('exp-amount').value;
+        
+        if(!name || !amount) return alert('請輸入完整資訊');
+
+        appState.expenses.push({
+            date: document.getElementById('exp-date').value,
+            category: document.getElementById('exp-cat').value,
+            name: name,
+            amount: parseInt(amount)
+        });
+        
+        saveData();
+        closeModal('modal-expense');
+        renderExpenses();
+    }
+
+    // --- Common & Utils ---
+    function closeModal(id) {
+        document.getElementById(id).classList.remove('open');
+    }
+
+    function saveData() {
+        localStorage.setItem('hokkaido_itinerary', JSON.stringify(appState.itinerary));
+        localStorage.setItem('hokkaido_shopping', JSON.stringify(appState.shopping));
+        localStorage.setItem('hokkaido_expenses', JSON.stringify(appState.expenses));
+    }
+
+    function calculateRate() {
+        const jpy = document.getElementById('jpy-input').value;
+        const rate = 0.22; // Mock rate
+        document.getElementById('twd-output').value = Math.round(jpy * rate);
+    }
+
+    function fetchWeather() {
+        // Mocking API call to Open-Meteo for Sapporo
+        fetch('https://api.open-meteo.com/v1/forecast?latitude=43.06&longitude=141.35&current_weather=true')
+            .then(response => response.json())
+            .then(data => {
+                const temp = data.current_weather.temperature;
+                document.getElementById('weather-temp').innerText = temp + '°C';
+                // Mock feel temp
+                document.getElementById('weather-feel').innerText = (temp - 2).toFixed(1);
+            })
+            .catch(err => {
+                console.error("Weather fetch failed", err);
+                document.getElementById('weather-temp').innerText = "-2°C";
+            });
+    }
+
+    // Init App
+    window.onload = init;
+
+</script>
+</body>
+</html>
